@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fortune Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Mystical floating elements */
+        .mystical-bg {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+
+        .star:nth-child(1) {
+            width: 3px;
+            height: 3px;
+            left: 10%;
+            top: 20%;
+            animation-delay: 0s;
+        }
+
+        .star:nth-child(2) {
+            width: 2px;
+            height: 2px;
+            left: 80%;
+            top: 30%;
+            animation-delay: 1s;
+        }
+
+        .star:nth-child(3) {
+            width: 4px;
+            height: 4px;
+            left: 60%;
+            top: 70%;
+            animation-delay: 2s;
+        }
+
+        .star:nth-child(4) {
+            width: 3px;
+            height: 3px;
+            left: 30%;
+            top: 80%;
+            animation-delay: 1.5s;
+        }
+
+        .star:nth-child(5) {
+            width: 2px;
+            height: 2px;
+            left: 90%;
+            top: 15%;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.5);
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .title {
+            color: white;
+            font-size: 48px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 40px;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            letter-spacing: 2px;
+        }
+
+        .fortune-cookie {
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .cookie-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            text-align: center;
+            filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.3));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+        
+        #fortuneBox {
+            background-color: #fff3cd;
+            border: 3px solid #856404;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #fortuneBox::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
+        }
+
+        #fortuneBox:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        }
+        
+        #fortuneText {
+            color: #856404;
+            font-size: 18px;
+            font-family: Georgia, serif;
+            line-height: 1.8;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        #fortuneText::before,
+        #fortuneText::after {
+            content: '"';
+            font-size: 48px;
+            opacity: 0.3;
+            position: absolute;
+            font-family: Georgia, serif;
+        }
+
+        #fortuneText::before {
+            content: '"';
+            top: -20px;
+            left: -10px;
+        }
+
+        #fortuneText::after {
+            content: '"';
+            bottom: -40px;
+            right: -10px;
+        }
+
+        .theme-label {
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+        }
+        
+        .button-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            perspective: 1000px;
+        }
+        
+        .color-btn {
+            width: 80px;
+            height: 80px;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .color-btn::before {
+            content: attr(data-label);
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+
+        .color-btn:hover::before {
+            bottom: -40px;
+            opacity: 1;
+        }
+
+        .color-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+
+        .color-btn:hover::after {
+            width: 100px;
+            height: 100px;
+        }
+        
+        .color-btn:hover {
+            transform: translateY(-8px) scale(1.1) rotateZ(5deg);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            border-color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .color-btn:active {
+            transform: translateY(-2px) scale(1.05);
+        }
+        
+        #greenBtn { 
+            background: linear-gradient(135deg, #90ee90 0%, #7cd87c 100%);
+        }
+        
+        #yellowBtn { 
+            background: linear-gradient(135deg, #ffd700 0%, #e6c200 100%);
+        }
+        
+        #blueBtn { 
+            background: linear-gradient(135deg, #87ceeb 0%, #6db9d9 100%);
+        }
+        
+        #orangeBtn { 
+            background: linear-gradient(135deg, #ffa500 0%, #e69500 100%);
+        }
+
+        /* Icon inside buttons */
+        .btn-icon {
+            font-size: 36px;
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="mystical-bg">
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">🔮 Fortune Generator 🔮</h1>
+        
+        <div class="fortune-cookie">
+            <div class="cookie-icon">🥠</div>
+        </div>
+
+        <div id="fortuneBox">
+            <p id="fortuneText">True wisdom comes not from knowledge, but from understanding.</p>
+        </div>
+        
+        <div class="theme-label">✨ Choose Your Theme ✨</div>
+        
+        <div class="button-container">
+            <button class="color-btn" id="greenBtn" data-label="Nature" onclick="changeBoxStyle('#90ee90', '#0d4a0d', '#0d4a0d', '24px', 'Arial, sans-serif', '5px')">
+                <span class="btn-icon">🌿</span>
+            </button>
+            <button class="color-btn" id="yellowBtn" data-label="Prosperity" onclick="changeBoxStyle('#ffd700', '#664d00', '#664d00', '20px', 'Courier New, monospace', '4px')">
+                <span class="btn-icon">💰</span>
+            </button>
+            <button class="color-btn" id="blueBtn" data-label="Wisdom" onclick="changeBoxStyle('#87ceeb', '#003366', '#003366', '22px', 'Verdana, sans-serif', '6px')">
+                <span class="btn-icon">🧠</span>
+            </button>
+            <button class="color-btn" id="orangeBtn" data-label="Energy" onclick="changeBoxStyle('#ffa500', '#8b2500', '#8b2500', '26px', 'Georgia, serif', '3px')">
+                <span class="btn-icon">⚡</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Array of at least 10 different fortune messages
+        const fortunes = [
+            "True wisdom comes not from knowledge, but from understanding.",
+            "The journey of a thousand miles begins with a single step.",
+            "Your greatest strength lies in your ability to adapt.",
+            "Opportunities are disguised as hard work, so most people don't recognize them.",
+            "The best time to plant a tree was 20 years ago. The second best time is now.",
+            "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+            "The only way to do great work is to love what you do.",
+            "Life is 10% what happens to you and 90% how you react to it.",
+            "The future belongs to those who believe in the beauty of their dreams.",
+            "Your positive action combined with positive thinking results in success.",
+            "Happiness is not something ready made. It comes from your own actions.",
+            "The secret of getting ahead is getting started."
+        ];
+
+        const fortuneBox = document.getElementById('fortuneBox');
+        const fortuneText = document.getElementById('fortuneText');
+
+        // Function to get a random fortune
+        function getRandomFortune() {
+            const randomIndex = Math.floor(Math.random() * fortunes.length);
+            return fortunes[randomIndex];
+        }
+
+        // Enhanced function to change the fortune box style with more visible differences
+        function changeBoxStyle(bgColor, textColor, borderColor, fontSize, fontFamily, borderWidth) {
+            // Change background color
+            fortuneBox.style.backgroundColor = bgColor;
+            
+            // Change font color (more contrasting)
+            fortuneText.style.color = textColor;
+            
+            // Change border color and width
+            fortuneBox.style.borderColor = borderColor;
+            fortuneBox.style.borderWidth = borderWidth;
+            
+            // Change font size (noticeable difference)
+            fortuneText.style.fontSize = fontSize;
+            
+            // Change font family (distinct fonts)
+            fortuneText.style.fontFamily = fontFamily;
+        }
+
+        // Display a random fortune when the page loads
+        window.onload = function() {
+            fortuneText.textContent = getRandomFortune();
+        };
+    </script>
+</body>
+</html>
